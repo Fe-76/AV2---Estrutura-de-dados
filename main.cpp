@@ -1,5 +1,6 @@
 #include "grafo.h"
 #include "caminhos_minimos.h"
+#include "arvore_geradora.h"
 
 int main() {
     Grafo g;
@@ -16,7 +17,6 @@ int main() {
     int MIL = g.adicionarVertice("MIL", "Milao, Italia");
     int ROM = g.adicionarVertice("ROM", "Roma, Italia");
 
-    // custo em reais, distancia em km, tempo em minutos
     g.adicionarAresta(CWB, LIS, 4200, 8250, 780);
     g.adicionarAresta(CWB, MAD, 4600, 8650, 840);
     g.adicionarAresta(CWB, PAR, 5100, 9650, 900);
@@ -40,7 +40,10 @@ int main() {
     g.adicionarAresta(ZRH, MIL, 280, 280, 210);
     g.adicionarAresta(MIL, ROM, 350, 575, 180);
 
-    cout << "=== GRAFO ORIGINAL ===" << endl;
+    cout << "========================================" << endl;
+    cout << "       PARTE 1 - GRAFO ORIGINAL" << endl;
+    cout << "========================================" << endl << endl;
+
     cout << "Vertices: " << g.n << "  Arestas: " << g.numArestas << endl << endl;
     for (int i = 0; i < g.n; i++)
         cout << g.sigla[i] << " - " << g.nome[i] << endl;
@@ -59,9 +62,19 @@ int main() {
     g.imprimirMatriz(DISTANCIA);
     cout << endl << "=== MATRIZ DE TEMPO (minutos) ===" << endl;
     g.imprimirMatriz(TEMPO);
-    
-     cout << endl << "=== CAMINHOS MINIMOS ===" << endl;
-    mostrarTodosCaminhosMinimos(g, CWB, BER);
-    
+    cout << endl;
+
+    cout << "========================================" << endl;
+    cout << "    PARTE 2 - CAMINHOS MINIMOS" << endl;
+    cout << "========================================" << endl << endl;
+
+    mostrarTodosCaminhosMinimos(g, CWB, ROM);
+
+    cout << "========================================" << endl;
+    cout << "  PARTE 3 - ARVORE GERADORA MINIMA" << endl;
+    cout << "========================================" << endl << endl;
+
+    mostrarAGM(g, CUSTO, "CUSTO (R$)");
+
     return 0;
 }
