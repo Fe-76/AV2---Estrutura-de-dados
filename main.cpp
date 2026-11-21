@@ -1,4 +1,5 @@
 #include "grafo.h"
+#include "caminhos_minimos.h"
 
 int main() {
     Grafo g;
@@ -58,6 +59,9 @@ int main() {
     g.imprimirMatriz(DISTANCIA);
     cout << endl << "=== MATRIZ DE TEMPO (minutos) ===" << endl;
     g.imprimirMatriz(TEMPO);
-
+    
+     cout << endl << "=== CAMINHOS MINIMOS ===" << endl;
+    mostrarTodosCaminhosMinimos(g, CWB, BER);
+    
     return 0;
 }
