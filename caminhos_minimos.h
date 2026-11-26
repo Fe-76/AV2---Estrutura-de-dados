@@ -49,6 +49,9 @@ inline void mostrarCaminhoMinimo(const Grafo& g, int origem, int destino, int cr
         int u = caminho[i], v = caminho[i + 1];
         for (const auto& a : g.adj[u]) {
             if (a.destino == v) {
+                cout << "   " << g.sigla[u] << " -> " << g.sigla[v] << "  [" << a.transporte
+                     << "]  R$ " << a.peso[CUSTO] << " | " << a.peso[DISTANCIA] << " km | "
+                     << horas(a.peso[TEMPO]) << endl;
                 total[CUSTO] += a.peso[CUSTO];
                 total[DISTANCIA] += a.peso[DISTANCIA];
                 total[TEMPO] += a.peso[TEMPO];

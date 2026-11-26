@@ -5,6 +5,7 @@
 struct ElementoAGM {
     int u, v;
     int peso[3];
+    string transporte;
 };
 
 struct ItemFila {
@@ -30,7 +31,8 @@ inline void mostrarAGM(const Grafo& g, int criterio, string titulo) {
         if (naArvore[item.v]) continue;
 
         naArvore[item.v] = true;
-        agm.push_back({item.u, item.v, {item.aresta.peso[0], item.aresta.peso[1], item.aresta.peso[2]}});
+        agm.push_back({item.u, item.v, {item.aresta.peso[0], item.aresta.peso[1], item.aresta.peso[2]},
+                       item.aresta.transporte});
 
         for (const auto& a : g.adj[item.v]) {
             if (!naArvore[a.destino])
@@ -44,6 +46,7 @@ inline void mostrarAGM(const Grafo& g, int criterio, string titulo) {
     int totalCusto = 0, totalDist = 0, totalTempo = 0;
     for (size_t i = 0; i < agm.size(); i++) {
         cout << "  " << (i + 1) << ". " << g.sigla[agm[i].u] << " <-> " << g.sigla[agm[i].v]
+             << "  [" << agm[i].transporte << "]"
              << "  (R$ " << agm[i].peso[CUSTO]
              << " | " << agm[i].peso[DISTANCIA] << " km"
              << " | " << horas(agm[i].peso[TEMPO]) << ")" << endl;

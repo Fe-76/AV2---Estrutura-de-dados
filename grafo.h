@@ -12,15 +12,26 @@ const int CUSTO = 0;
 const int DISTANCIA = 1;
 const int TEMPO = 2;
 
+// Cada aresta guarda o destino, os 3 pesos e o meio de transporte.
+// Custo em R$, distancia em km e tempo em minutos (exibido sempre em horas).
 struct Aresta {
     int destino;
     int peso[3];
+    string transporte;
 };
 
+// Converte horas + minutos para minutos. Ex.: h(11, 40) = 700.
+// Usado no cadastro das arestas para escrever o tempo em horas.
+inline int h(int horas, int minutos = 0) {
+    return horas * 60 + minutos;
+}
+
+// Formata minutos como horas. Ex.: 700 -> "11h40", 120 -> "2h".
 inline string horas(int minutos) {
     string s = to_string(minutos / 60) + "h";
-    if (minutos % 60 > 0)
-        s += to_string(minutos % 60) + "min";
+    int resto = minutos % 60;
+    if (resto > 0)
+        s += (resto < 10 ? "0" : "") + to_string(resto);
     return s;
 }
 
@@ -40,21 +51,22 @@ public:
         return n - 1;
     }
 
-    void adicionarAresta(int u, int v, int custo, int km, int minutos) {
-        adj[u].push_back({v, {custo, km, minutos}});
-        adj[v].push_back({u, {custo, km, minutos}});
+    // Grafo nao direcionado: a aresta e inserida nas duas listas.
+    void adicionarAresta(int u, int v, string transporte, int custo, int km, int minutos) {
+        adj[u].push_back({v, {custo, km, minutos}, transporte});
+        adj[v].push_back({u, {custo, km, minutos}, transporte});
         numArestas++;
     }
 
     void imprimirLista() const {
         cout << "Lista de Adjacencia:" << endl;
         for (int u = 0; u < n; u++) {
-            cout << sigla[u];
+            cout << sigla[u] << endl;
             for (const auto& a : adj[u]) {
-                cout << " -> " << sigla[a.destino] << " (R$ " << a.peso[CUSTO]
-                     << " | " << a.peso[DISTANCIA] << " km | " << horas(a.peso[TEMPO]) << ")";
+                cout << "   -> " << sigla[a.destino] << "  [" << a.transporte << "]  R$ "
+                     << a.peso[CUSTO] << " | " << a.peso[DISTANCIA] << " km | "
+                     << horas(a.peso[TEMPO]) << endl;
             }
-            cout << endl;
         }
     }
 
@@ -66,18 +78,21 @@ public:
                 m[u][a.destino] = a.peso[c];
         }
 
-        cout << setw(6) << "i/j";
+        const int L = 7;
+        cout << setw(L) << "i/j";
         for (int j = 0; j < n; j++)
-            cout << setw(6) << sigla[j];
+            cout << setw(L) << sigla[j];
         cout << endl;
 
         for (int i = 0; i < n; i++) {
-            cout << setw(6) << sigla[i];
+            cout << setw(L) << sigla[i];
             for (int j = 0; j < n; j++) {
                 if (m[i][j] == INT_MAX)
-                    cout << setw(6) << "inf";
+                    cout << setw(L) << "-";
+                else if (c == TEMPO)
+                    cout << setw(L) << horas(m[i][j]);
                 else
-                    cout << setw(6) << m[i][j];
+                    cout << setw(L) << m[i][j];
             }
             cout << endl;
         }
